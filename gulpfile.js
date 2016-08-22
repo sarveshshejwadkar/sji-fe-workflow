@@ -4,7 +4,9 @@ var gulp = require('gulp'),
 	cssnano = require('gulp-cssnano'),
 	imagemin = require('gulp-imagemin'),
 	uglify = require('gulp-uglify'),
-	sass = require('gulp-sass');
+	sass = require('gulp-sass'),
+	browserSync = require('browser-sync').create(),
+	reload      = browserSync.reload;
 
 gulp.task('js', function () {
 	return gulp.src('./js/src/*.js')
@@ -23,7 +25,7 @@ gulp.task('sass', function () {
 });
 
 gulp.task('cssnano', function() {
-    return gulp.src('./styles/css/*.css')
+    return gulp.src('./styles/src/*.css')
         .pipe(cssnano())
         .pipe(gulp.dest('./styles/dist'));
 });
@@ -34,8 +36,27 @@ gulp.task('imagemin', function() {
 		.pipe(gulp.dest('./images/dist'));
 });
 
-gulp.task('default', ['js', 'cssnano', 'sass', 'imagemin']);
+gulp.task('js-watch', ['js'], function (done) {
+	browserSync.reload();
+	done();
+});
 
+gulp.task('css-watch', ['cssnano'], function (done) {
+	browserSync.reload();
+	done();
+});
+
+gulp.task('serve', ['js', 'cssnano', 'sass', 'imagemin'], function () {
+    // Serve files from the root of this project
+    browserSync.init({
+        server: {
+            baseDir: "./"
+        }
+    });
+    gulp.watch("js/src/*.js", ['js-watch']);
+    gulp.watch("styles/src/*.css", ['css-watch']);
+    gulp.watch("*.html").on("change", reload);
+});
 
 // gulp.task('jshint', function() {
 //   	return gulp.src('./js/src/*.js')
