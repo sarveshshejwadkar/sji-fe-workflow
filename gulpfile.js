@@ -2,22 +2,24 @@ var gulp = require('gulp'),
 	jslint = require('gulp-jslint'),
 	jshint = require('gulp-jshint'),
 	cssnano = require('gulp-cssnano'),
-	imagemin = require('gulp-imagemin');
+	imagemin = require('gulp-imagemin'),
+	uglify = require('gulp-uglify'),
+	sass = require('gulp-sass');
 
-gulp.task('default', function() {
-  // place code for your default task here
-});
-
-gulp.task('jslint', function () {
+gulp.task('js', function () {
 	return gulp.src('./js/src/*.js')
-		.pipe(jslint())
-		.pipe(jslint.reporter('default'));
+		// .pipe(jslint())
+		// .pipe(jslint.reporter('default'))
+		.pipe(jshint())
+    	.pipe(jshint.reporter('default'))
+		.pipe(uglify())
+      	.pipe(gulp.dest('./js/dist'));
 });
 
-gulp.task('jshint', function() {
-  	return gulp.src('./js/src/*.js')
-    	.pipe(jshint())
-    	.pipe(jshint.reporter('default'));
+gulp.task('sass', function () {
+  return gulp.src('./sass/src/**/*.scss')
+    .pipe(sass().on('error', sass.logError))
+    .pipe(gulp.dest('./sass/dist'));
 });
 
 gulp.task('cssnano', function() {
@@ -31,3 +33,18 @@ gulp.task('imagemin', function() {
 		.pipe(imagemin())
 		.pipe(gulp.dest('./images/dist'));
 });
+
+gulp.task('default', ['js', 'cssnano', 'sass', 'imagemin']);
+
+
+// gulp.task('jshint', function() {
+//   	return gulp.src('./js/src/*.js')
+//     	.pipe(jshint())
+//     	.pipe(jshint.reporter('default'));
+// });
+
+// gulp.task('minify', function () {
+//    gulp.src('./js/src/*.js')
+//       .pipe(uglify())
+//       .pipe(gulp.dest('./js/dist'))
+// });
