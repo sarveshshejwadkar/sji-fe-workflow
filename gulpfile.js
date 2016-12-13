@@ -1,10 +1,10 @@
-var gulp = require('gulp'),
-	jslint = require('gulp-jslint'),
-	jshint = require('gulp-jshint'),
-	cssnano = require('gulp-cssnano'),
-	imagemin = require('gulp-imagemin'),
-	uglify = require('gulp-uglify'),
-	sass = require('gulp-sass'),
+var gulp 		= require('gulp'),
+	jslint 		= require('gulp-jslint'),
+	jshint 		= require('gulp-jshint'),
+	cssnano 	= require('gulp-cssnano'),
+	imagemin 	= require('gulp-imagemin'),
+	uglify 		= require('gulp-uglify'),
+	sass 		= require('gulp-sass'),
 	browserSync = require('browser-sync').create(),
 	reload      = browserSync.reload;
 
@@ -17,14 +17,14 @@ gulp.task('js', function () {
 });
 
 gulp.task('sass', function () {
-  return gulp.src('./src/sass/**/*.scss')
-    .pipe(sass().on('error', sass.logError))
-    .pipe(cssnano())
-    .pipe(gulp.dest('./dist/css'));
+  	return gulp.src('./src/sass/**/*.scss')
+    	.pipe(sass().on('error', sass.logError))
+    	.pipe(cssnano())
+    	.pipe(gulp.dest('./dist/css'));
 });
 
 gulp.task('imagemin', function() {
-	return gulp.src('./src/images/**/*.jpg')
+	return gulp.src('./src/images/**/*')
 		.pipe(imagemin())
 		.pipe(gulp.dest('./dist/images'));
 });
@@ -53,6 +53,6 @@ gulp.task('serve', ['js', 'sass', 'imagemin'], function () {
     });
     gulp.watch("src/js/*.js", ['js-watch']);
     gulp.watch("src/sass/*.scss", ['sass-watch']);
-    gulp.watch("src/image/*.jpg", ['image-watch']);
+    gulp.watch("src/images/*", ['image-watch']);
     gulp.watch("*.html").on("change", reload);
 });
