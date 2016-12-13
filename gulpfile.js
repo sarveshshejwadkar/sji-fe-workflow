@@ -9,31 +9,24 @@ var gulp = require('gulp'),
 	reload      = browserSync.reload;
 
 gulp.task('js', function () {
-	return gulp.src('./js/src/*.js')
-		// .pipe(jslint())
-		// .pipe(jslint.reporter('default'))
+	return gulp.src('./src/js/*.js')
 		.pipe(jshint())
     	.pipe(jshint.reporter('default'))
 		.pipe(uglify())
-      	.pipe(gulp.dest('./js/dist'));
+      	.pipe(gulp.dest('./dist/js'));
 });
 
 gulp.task('sass', function () {
-  return gulp.src('./sass/src/**/*.scss')
+  return gulp.src('./src/sass/**/*.scss')
     .pipe(sass().on('error', sass.logError))
-    .pipe(gulp.dest('./sass/dist'));
-});
-
-gulp.task('cssnano', function() {
-    return gulp.src('./styles/src/*.css')
-        .pipe(cssnano())
-        .pipe(gulp.dest('./styles/dist'));
+    .pipe(cssnano())
+    .pipe(gulp.dest('./dist/css'));
 });
 
 gulp.task('imagemin', function() {
-	return gulp.src('./images/src/*')
+	return gulp.src('./src/images/**/*.jpg')
 		.pipe(imagemin())
-		.pipe(gulp.dest('./images/dist'));
+		.pipe(gulp.dest('./dist/images'));
 });
 
 gulp.task('js-watch', ['js'], function (done) {
@@ -41,31 +34,25 @@ gulp.task('js-watch', ['js'], function (done) {
 	done();
 });
 
-gulp.task('css-watch', ['cssnano'], function (done) {
+gulp.task('sass-watch', ['sass'], function (done) {
 	browserSync.reload();
 	done();
 });
 
-gulp.task('serve', ['js', 'cssnano', 'sass', 'imagemin'], function () {
+gulp.task('image-watch', ['imagemin'], function (done) {
+	browserSync.reload();
+	done();
+});
+
+gulp.task('serve', ['js', 'sass', 'imagemin'], function () {
     // Serve files from the root of this project
     browserSync.init({
         server: {
             baseDir: "./"
         }
     });
-    gulp.watch("js/src/*.js", ['js-watch']);
-    gulp.watch("styles/src/*.css", ['css-watch']);
+    gulp.watch("src/js/*.js", ['js-watch']);
+    gulp.watch("src/sass/*.scss", ['sass-watch']);
+    gulp.watch("src/image/*.jpg", ['image-watch']);
     gulp.watch("*.html").on("change", reload);
 });
-
-// gulp.task('jshint', function() {
-//   	return gulp.src('./js/src/*.js')
-//     	.pipe(jshint())
-//     	.pipe(jshint.reporter('default'));
-// });
-
-// gulp.task('minify', function () {
-//    gulp.src('./js/src/*.js')
-//       .pipe(uglify())
-//       .pipe(gulp.dest('./js/dist'))
-// });
