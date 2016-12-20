@@ -46,15 +46,15 @@ gulp.task('image-watch', ['imagemin'], function (done) {
 
 gulp.task('serve', ['js', 'sass', 'imagemin'], function () {
     //serve from current directory
-    browserSync.init({
-        server: {
-            baseDir: "./",
-        }
-    });
-    //serve from domain
     // browserSync.init({
-    //     proxy: "localhost/wordpress/"
+    //     server: {
+    //         baseDir: "./",
+    //     }
     // });
+    //serve from domain
+    browserSync.init({
+        proxy: "localhost/wordpress/" /* replace with your vhost domain name like sitename.sj*/
+    });
     gulp.watch("src/js/*.js", ['js-watch']);
     gulp.watch("src/sass/*.scss", ['sass-watch']);
     gulp.watch("src/images/*", ['image-watch']);
