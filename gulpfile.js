@@ -1,6 +1,5 @@
-var gulp        = require('gulp'),
-    jslint      = require('gulp-jslint'),
-    jshint      = require('gulp-jshint'),
+const gulp      = require('gulp'),
+    eslint      = require('gulp-eslint');
     cssnano     = require('gulp-cssnano'),
     imagemin    = require('gulp-imagemin'),
     uglify      = require('gulp-uglify'),
@@ -10,8 +9,9 @@ var gulp        = require('gulp'),
 
 gulp.task('js', function () {
     return gulp.src('./src/js/*.js')
-        .pipe(jshint())
-        .pipe(jshint.reporter('default'))
+        .pipe(eslint())
+        .pipe(eslint.format())
+        .pipe(eslint.failAfterError())
         .pipe(uglify())
         .pipe(gulp.dest('./dist/js'));
 });
