@@ -1,9 +1,10 @@
 const gulp      = require('gulp'),
-    eslint      = require('gulp-eslint');
+    eslint      = require('gulp-eslint'),
     cssnano     = require('gulp-cssnano'),
     imagemin    = require('gulp-imagemin'),
     uglify      = require('gulp-uglify'),
     sass        = require('gulp-sass'),
+    sassLint    = require('gulp-sass-lint'),
     browserSync = require('browser-sync').create(),
     reload      = browserSync.reload;
 
@@ -18,6 +19,9 @@ gulp.task('js', function () {
 
 gulp.task('sass', function () {
     return gulp.src('./src/sass/**/*.scss')
+        .pipe(sassLint({configFile: './.sass-lint.yml'}))
+        .pipe(sassLint.format())
+        .pipe(sassLint.failOnError())
         .pipe(sass().on('error', sass.logError))
         .pipe(cssnano())
         .pipe(gulp.dest('./dist/css'));
