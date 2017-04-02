@@ -6,14 +6,20 @@ const gulp      = require('gulp'),
     sass        = require('gulp-sass'),
     sassLint    = require('gulp-sass-lint'),
     browserSync = require('browser-sync').create(),
-    reload      = browserSync.reload;
+    reload      = browserSync.reload,
+    babel       = require('gulp-babel'),
+    concat      = require('gulp-concat');
 
 gulp.task('js', function () {
     return gulp.src('./src/js/*.js')
         .pipe(eslint())
         .pipe(eslint.format())
         .pipe(eslint.failAfterError())
+        .pipe(babel({
+            presets: ['es2015']
+        }))
         .pipe(uglify())
+        .pipe(concat('all.js'))
         .pipe(gulp.dest('./dist/js'));
 });
 
@@ -64,3 +70,5 @@ gulp.task('serve', ['js', 'sass', 'imagemin'], function () {
     gulp.watch("src/images/*", ['image-watch']);
     gulp.watch("*.html").on("change", reload);
 });
+
+gulp.task('build', ['js', 'sass', 'imagemin']);
