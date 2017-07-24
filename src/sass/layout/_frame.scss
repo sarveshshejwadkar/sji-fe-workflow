@@ -1,0 +1,37 @@
+html {
+    box-sizing: border-box;
+}
+
+* {
+    letter-spacing: $letter-spacing;
+
+    &::before,
+    &::after {
+        box-sizing: inherit;
+    }
+}
+
+body {
+    color: $black;
+    height: 100%;
+    margin: 0;
+    overflow: auto;
+    padding: 0;
+}
+
+h2 {
+    color: $menu-txt;
+    font-family: $font-menu-links;
+    font-size: 40px;
+}
+
+h3 {
+    color: $menu-txt;
+    font-family: $font-menu-links;
+    font-size: 18px;
+}
+
+p {
+    font-family: $font-menu-sub-links;
+    font-size: 18px;
+}

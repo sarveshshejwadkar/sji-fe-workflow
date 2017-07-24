@@ -1,0 +1,38 @@
+.primary-menu {
+    margin-left: 0;
+    padding: 0;
+    text-align: center;
+
+    li {
+        list-style: none;
+    }
+
+    & > li {
+        margin: 20px 0 40px;
+
+        & > a {
+            @include menu-style;
+            text-decoration: none;
+        }
+
+        &:first-child {
+            display: none;
+        }
+
+        &:nth-child(2) {
+            display: none;
+        }
+    }
+
+    .sub-menu {
+        margin-left: 0;
+        padding-left: 0;
+
+        & > li {
+
+            & > a {
+                @include menu-sub-links;
+            }
+        }
+    }
+}

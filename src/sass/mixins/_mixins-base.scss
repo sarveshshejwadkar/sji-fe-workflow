@@ -1,0 +1,40 @@
+@mixin menu-li {
+    float: left;
+    list-style: none;
+    text-align: left;
+    width: 100%;
+
+    a {
+        color: inherit;
+        float: left;
+        text-decoration: none;
+        width: 100%;
+    }
+}
+@mixin menu-style {
+    color: $menu-txt;
+    font-family: $font-menu-links;
+    font-size: 21px;
+    letter-spacing: $letter-spacing;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+@mixin slider($img) {
+    background-image: url('#{$img-path}#{$img}');
+    background-repeat: no-repeat;
+    content: 'a';
+    height: 30px;
+    position: absolute;
+    text-indent: -1000em;
+    top: 38%;
+    width: 30px;
+    z-index: 20;
+}
+
+@mixin quote-mark {
+    color: $menu-txt;
+    font-size: 2em;
+    line-height: 1px;
+    position: relative;
+    top: 14px;
+}
