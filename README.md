@@ -5,10 +5,13 @@ Requirements:
 
 Install Node.js
 Install Gulp globally, run command 'npm install gulp --global'
+
 Run 'npm install' from project root folder
-update gulpfile.js in the root folder 
-  browserSync.init({
-    proxy: "localhost/wordpress/" /* replace with your vhost domain name like sitename.sj*/
-  });
+
+Update gulpfile.js in the root folder as mentioned below:
+
+    browserSync.init({  
+      proxy: "localhost/wordpress/" /* replace with your vhost domain name like sitename.sj*/    
+    });
     
 Run 'gulp serve' 
