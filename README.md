@@ -4,7 +4,10 @@ Front End Workflow for Web Developers at SJInnovation
 Requirements:
 
 Install Node.js
+
 Install Gulp globally, run command 'npm install gulp --global'
+
+How to Run:
 
 Run 'npm install' from project root folder
 
