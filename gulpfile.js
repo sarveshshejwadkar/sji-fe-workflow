@@ -11,7 +11,7 @@ const gulp      = require('gulp'),
     concat      = require('gulp-concat');
 
 gulp.task('js', function () {
-    return gulp.src('./src/js/*.js')
+    return gulp.src('./src/js/**/*.js')
         .pipe(eslint())
         .pipe(eslint.format())
         .pipe(eslint.failAfterError())
@@ -65,10 +65,10 @@ gulp.task('serve', ['js', 'sass', 'imagemin'], function () {
     browserSync.init({
         proxy: "localhost/wordpress/" /* replace with your vhost domain name like sitename.sj*/
     });
-    gulp.watch("src/js/*.js", ['js-watch']);
-    gulp.watch("src/sass/*.scss", ['sass-watch']);
-    gulp.watch("src/images/*", ['image-watch']);
-    gulp.watch("*.html").on("change", reload);
+    gulp.watch("src/js/**/*.js", ['js-watch']);
+    gulp.watch("src/sass/**/*.scss", ['sass-watch']);
+    gulp.watch("src/images/**/*", ['image-watch']);
+    gulp.watch("**/*.html").on("change", reload);
 });
 
 gulp.task('build', ['js', 'sass', 'imagemin']);
