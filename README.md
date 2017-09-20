@@ -5,7 +5,7 @@ Requirements:
 
 Install Node.js
 
-Install Gulp globally, run command 'npm install gulp --global'
+Install Gulp globally, run command 'npm install gulp-cli -g'
 
 How to Run:
 
