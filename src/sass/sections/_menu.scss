@@ -31,7 +31,7 @@
         & > li {
 
             & > a {
-                @include menu-sub-links;
+                @include menu-style;
             }
         }
     }

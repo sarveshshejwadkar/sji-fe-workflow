@@ -1,5 +1,6 @@
-const gulp      = require('gulp'),
-    eslint      = require('gulp-eslint'),
+const { src, dest, watch, series, parallel }      = require('gulp');
+
+const eslint      = require('gulp-eslint'),
     cssnano     = require('gulp-cssnano'),
     imagemin    = require('gulp-imagemin'),
     uglify      = require('gulp-uglify'),
@@ -10,65 +11,83 @@ const gulp      = require('gulp'),
     babel       = require('gulp-babel'),
     concat      = require('gulp-concat');
 
-gulp.task('js', function () {
-    return gulp.src('./src/js/**/*.js')
-        .pipe(eslint())
-        .pipe(eslint.format())
-        .pipe(eslint.failAfterError())
-        .pipe(babel({
-            presets: ['es2015']
-        }))
-        .pipe(uglify())
-        .pipe(concat('all.js'))
-        .pipe(gulp.dest('./dist/js'));
-});
+sass.compiler = require('node-sass')
 
-gulp.task('sass', function () {
-    return gulp.src('./src/sass/**/*.scss')
-        .pipe(sassLint({configFile: './.sass-lint.yml'}))
-        .pipe(sassLint.format())
-        .pipe(sassLint.failOnError())
-        .pipe(sass().on('error', sass.logError))
-        .pipe(cssnano())
-        .pipe(gulp.dest('./dist/css'));
-});
+function js_build() {
+    return src('./src/js/**/*.js')
+        .pipe( eslint({ 'fix': true }) )
+        .pipe( eslint.format() )
+        .pipe( eslint.failAfterError() )
+        .pipe( babel({
+            presets: ['@babel/env']
+        }) )
+        .pipe( uglify() )
+        .pipe( concat('all.js') )
+        .pipe( dest('./dist/js') )
+}
 
-gulp.task('imagemin', function() {
-    return gulp.src('./src/images/**/*')
-        .pipe(imagemin())
-        .pipe(gulp.dest('./dist/images'));
-});
+function sass_build() {
+    return src('./src/sass/**/*.s+(a|c)ss')
+        .pipe( sassLint({configFile: './.sass-lint.yml'}) )
+        .pipe( sassLint.format() )
+        .pipe( sassLint.failOnError() )
+        .pipe( sass().on('error', sass.logError) )
+        .pipe( cssnano() )
+        .pipe( dest('./dist/css') );
+}
 
-gulp.task('js-watch', ['js'], function (done) {
+function imagemin_build() {
+    return src('./src/images/**/*')
+        .pipe( imagemin() )
+        .pipe( dest('./dist/images') );
+}
+
+function js_watcher() {
+    watch( ['src/js/**/*.js'], series(js_build, browser_reload) )
+}
+
+function sass_watcher() {
+    watch( ['src/sass/**/*.scss'], series(sass_build, browser_reload) )
+}
+
+function image_watcher() {
+    watch( ['src/images/**/*'], series(imagemin_build, browser_reload) )
+}
+
+function html_watcher() {
+    watch(['**/*.html'], browser_reload)
+}
+
+function browser_reload(done) {
     browserSync.reload();
     done();
-});
+}
 
-gulp.task('sass-watch', ['sass'], function (done) {
-    browserSync.reload();
-    done();
-});
-
-gulp.task('image-watch', ['imagemin'], function (done) {
-    browserSync.reload();
-    done();
-});
-
-gulp.task('serve', ['js', 'sass', 'imagemin'], function () {
-    //serve from current directory
-    // browserSync.init({
-    //     server: {
-    //         baseDir: "./",
-    //     }
-    // });
-    //serve from domain
+function serve_site(done) {
+    // serve from current directory
     browserSync.init({
-        proxy: "localhost/wordpress/" /* replace with your vhost domain name like sitename.sj*/
+        server: {
+            baseDir: "./",
+        }
     });
-    gulp.watch("src/js/**/*.js", ['js-watch']);
-    gulp.watch("src/sass/**/*.scss", ['sass-watch']);
-    gulp.watch("src/images/**/*", ['image-watch']);
-    gulp.watch("**/*.html").on("change", reload);
-});
+    //serve from domain
+    // browserSync.init({
+    //     proxy: "localhost/wordpress/" /* replace with your vhost domain name like sitename.sj*/
+    // });
+    done()
+}
 
-gulp.task('build', ['js', 'sass', 'imagemin']);
+exports.serve = series(
+    parallel(
+        js_build, 
+        sass_build, 
+        imagemin_build
+     ), 
+     serve_site, 
+     parallel(
+        js_watcher, 
+        sass_watcher, 
+        image_watcher, 
+        html_watcher
+    )
+)
