@@ -42,6 +42,11 @@ function imagemin_build() {
         .pipe( dest('./dist/images') );
 }
 
+function browser_reload(done) {
+    browserSync.reload();
+    done();
+}
+
 function js_watcher() {
     watch( ['src/js/**/*.js'], series(js_build, browser_reload) )
 }
@@ -56,11 +61,6 @@ function image_watcher() {
 
 function html_watcher() {
     watch(['**/*.html'], browser_reload)
-}
-
-function browser_reload(done) {
-    browserSync.reload();
-    done();
 }
 
 function serve_site(done) {
