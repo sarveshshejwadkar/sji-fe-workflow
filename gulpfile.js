@@ -42,6 +42,20 @@ function imagemin_build() {
         .pipe( dest('./dist/images') );
 }
 
+function serve_site(done) {
+    // serve from current directory
+    browserSync.init({
+        server: {
+            baseDir: "./",
+        }
+    });
+    //serve from domain
+    // browserSync.init({
+    //     proxy: "localhost/wordpress/" /* replace with your vhost domain name like sitename.sj*/
+    // });
+    done()
+}
+
 function browser_reload(done) {
     browserSync.reload();
     done();
@@ -61,20 +75,6 @@ function image_watcher() {
 
 function html_watcher() {
     watch(['**/*.html'], browser_reload)
-}
-
-function serve_site(done) {
-    // serve from current directory
-    browserSync.init({
-        server: {
-            baseDir: "./",
-        }
-    });
-    //serve from domain
-    // browserSync.init({
-    //     proxy: "localhost/wordpress/" /* replace with your vhost domain name like sitename.sj*/
-    // });
-    done()
 }
 
 exports.serve = series(
